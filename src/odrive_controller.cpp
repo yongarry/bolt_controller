@@ -32,8 +32,8 @@ int main(int argc, char **argv)
     // }
 
 
-    joint_setmsg.effort = {count * 0.0001,0,0,0,0,0};
-    // joint_setmsg.position = {count * PI/500.0,0,0,0,0,0};
+    // joint_setmsg.effort = {count * 0.0001,0,0,0,0,0};
+    joint_setmsg.position = {count * PI/500.0,0,0,0,0,0};
 
     // joint_setmsg.effort[0] = 0.5;
     // joint_setmsg.effort[1] = 0.0;
@@ -47,10 +47,19 @@ int main(int argc, char **argv)
     ros::spinOnce();
 
     loop_rate.sleep();
-    if (count < 500)
-        count++;
+    if (count < 500 && increasing_state)
+      count++;
+    else if (count == 500)
+    {
+      increasing_state = false;
+      count--;
+    }
     else
-        count = -500;
+     {
+      count--; 
+      if(count < -500)
+        increasing_state = true;
+     }
   }
 
 
